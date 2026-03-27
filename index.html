@@ -1,168 +1,76 @@
-import { useState, useEffect } from "react";
-import { FileText, Code, Award, ArrowRight, Github, Mail, Brain, ShieldCheck, Leaf, Download, Eye, X } from "lucide-react";
+import React, { useState, useEffect } from 'react';
+import { 
+  FileText, 
+  Code, 
+  Award, 
+  Lightbulb, 
+  User, 
+  ArrowRight, 
+  ExternalLink, 
+  Github, 
+  Mail,
+  BookOpen,
+  Brain,
+  ShieldCheck,
+  Leaf,
+  Download
+} from 'lucide-react';
 
-const papers = [
-  {
-    key: "railway",
-    title: "Smart Digital Railway Station",
-    subtitle: "AI-Based Control & Magnetic Safety",
-    icon: <ShieldCheck size={18} className="text-emerald-400" />,
-    iconBg: "bg-emerald-500/10",
-    accent: "text-emerald-400",
-    tag: "National Prize",
-    tagColor: "bg-emerald-500/15 text-emerald-400 border border-emerald-500/25",
-    border: "border-emerald-500/30 hover:border-emerald-500/60",
-    btn: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500 hover:text-slate-950",
-    dlBtn: "hover:border-emerald-500/40 hover:text-emerald-300",
-    highlights: ["AI Overspeed Prediction", "Magnetic Barrier System", "IoT Sensor Network"],
-    description: "A framework integrating AI for overspeed prediction and magnetic repulsion for platform-edge stabilization. Competed against leading scientists nationwide.",
-    detailLine: "Published in National Science Museum Magazine",
-    content: {
-      abstract: "Conventional railway stations rely heavily on manual signaling, fixed schedules, and human-operated safety checks, which can result in delays, accidents, and inefficient passenger management. This paper proposes a Smart Digital Railway Station framework that integrates artificial intelligence, real-time sensor networks, automated safety barriers, and optional magnetic safety modules to create a safer, faster, and more intelligent railway environment.",
-      sections: [
-        { heading: "1. Introduction", body: "Railway stations are critical nodes in national transportation systems. Despite advancements in train technology, many stations continue to operate with outdated manual systems. Accidents at platforms, signal miscommunication, overcrowding, and delayed hazard detection remain serious problems, particularly in developing countries. A Smart Digital Railway Station transforms a station into an intelligent control hub, using data, automation, and physics-based safety mechanisms to reduce human error and improve operational efficiency." },
-        { heading: "2. Core Problems in Traditional Stations", body: "Manual or semi-manual signal operations · Limited real-time train speed and location tracking · Unsafe platform-edge behavior · Delayed response to mechanical failures · Poor crowd management during peak hours. These problems require a system-level digital solution, rather than isolated mechanical fixes." },
-        { heading: "3. Proposed Architecture", body: "The system consists of four interconnected layers: (1) Digital Sensing Layer — track-mounted vibration and temperature sensors, platform-edge proximity sensors, CCTV and LiDAR-based crowd monitoring. (2) AI Control and Decision Layer — AI models predict overspeed risks near stations, automatic hazard detection, dynamic platform assignment, predictive maintenance alerts. (3) Automated Safety Infrastructure — smart platform screen doors, intelligent signal lights linked to AI predictions, emergency magnetic braking. (4) Magnetic Safety Assistance Module — magnetic repulsion or electromagnetic damping near station entry curves, high-speed approach zones, and emergency stopping corridors." },
-        { heading: "4. Digital Train–Station Interaction", body: "Each train communicates digitally with the station prior to arrival: real-time transmission of speed and status, AI calculates safe stopping distance, platform systems prepare barriers and signals automatically, emergency override activates if unsafe parameters are detected. This reduces human dependency and reaction delays." },
-        { heading: "5. Advantages", body: "Reduced accident risk · Faster emergency response · Lower long-term maintenance costs · Less human error · Applicable to both developed and developing countries." },
-        { heading: "6. Future Scope", body: "Fully autonomous station control · AI-powered national railway networks · Integration with smart city infrastructure · Renewable-energy-powered magnetic modules." },
-      ]
-    }
-  },
-  {
-    key: "jackfruit",
-    title: "Jackfruit Seed Nutrition",
-    subtitle: "Sustainable Humanitarian Food Source",
-    icon: <Brain size={18} className="text-blue-400" />,
-    iconBg: "bg-blue-500/10",
-    accent: "text-blue-400",
-    tag: "Humanitarian",
-    tagColor: "bg-blue-500/15 text-blue-400 border border-blue-500/25",
-    border: "border-blue-500/30 hover:border-blue-500/60",
-    btn: "bg-blue-500/10 text-blue-400 border-blue-500/30 hover:bg-blue-500 hover:text-slate-950",
-    dlBtn: "hover:border-blue-500/40 hover:text-blue-300",
-    highlights: ["533M Children Reached", "Zero Oil Preparation", "Agricultural Waste Reuse"],
-    description: "Proposed a model to provide 1,200 kcal/day to 533 million children by converting discarded agricultural waste into zero-oil nutritional food.",
-    detailLine: "Focus: Crisis zone applicability",
-    content: {
-      abstract: "Malnutrition remains a global challenge, with millions of children lacking sufficient nutrition. Jackfruit, widely grown in South and Southeast Asia, is a nutritious fruit whose seeds are mostly discarded. This paper explores the potential of utilizing jackfruit seeds as a sustainable food source. Based on production data and caloric analysis, the seeds could provide energy to millions of children annually with minimal resources required for preparation.",
-      sections: [
-        { heading: "1. Problem Statement", body: "Millions of children suffer from malnutrition worldwide. Conventional food aid requires water, oil, and infrastructure, which may be limited in crisis zones. Jackfruit seeds, representing ~10–12% of total fruit weight, are discarded as waste — representing lost nutritional and economic potential." },
-        { heading: "2. Jackfruit Production & Seed Availability", body: "Annual global production: 422 million jackfruits. Average seed weight ~1 kg per fruit. Major producers: Bangladesh, India, Indonesia, Sri Lanka. Assuming 80% seed collection: total seeds — 337.6 million kg. Total energy: ~640 billion kcal. This could provide 1,200 kcal/day to 533.7 million children, or a full year of nutrition for ~1.4 million children." },
-        { heading: "3. Nutritional Analysis (per 100g raw)", body: "Energy: 190 kcal · Protein: 7–9g · Carbohydrate: 35–40g · Fiber: 1.5–2g · Fat: 0.4g · High levels of zinc, iron, and vitamins. Preparation: Roasting or baking requires no water or oil, making it suitable for regions with scarce resources." },
-        { heading: "4. Proposed Implementation Model", body: "(1) Seed Collection — collect from fruit processing centers, markets, and farms. (2) Processing — clean, dry, and roast seeds for consumption. (3) Distribution — supply to orphanages, schools, refugee camps, and food aid programs. (4) Scale-up — increase jackfruit cultivation in Bangladesh and India to expand production." },
-        { heading: "5. Economic & Livestock Benefits", body: "Exporting jackfruit juice or processed seeds could strengthen local economies. Residual fruit waste can feed livestock, supporting milk and meat production." },
-        { heading: "6. Impact & Sustainability", body: "Provides a low-cost, nutrient-rich food source · Reduces food waste · Requires minimal water, oil, and infrastructure · Supports both human nutrition and livestock management · Even partial implementation could have a significant humanitarian impact." },
-      ]
-    }
-  },
-  {
-    key: "biopack",
-    title: "Ultra-Low-Cost Bio-Packaging",
-    subtitle: "Jackfruit Waste & Coconut Biochar",
-    icon: <Leaf size={18} className="text-lime-400" />,
-    iconBg: "bg-lime-500/10",
-    accent: "text-lime-400",
-    tag: "Materials Science",
-    tagColor: "bg-lime-500/15 text-lime-400 border border-lime-500/25",
-    border: "border-lime-500/30 hover:border-lime-500/60",
-    btn: "bg-lime-500/10 text-lime-400 border-lime-500/30 hover:bg-lime-500 hover:text-slate-950",
-    dlBtn: "hover:border-lime-500/40 hover:text-lime-300",
-    highlights: ["≤1 BDT Per Bag", "Coconut Shell Biochar", "Circular Economy"],
-    description: "Biodegradable bag costing ≤1 BDT using seed starch and coconut shell biochar for water resistance. A practical plastic alternative for developing regions.",
-    detailLine: "Alternative to single-use plastics",
-    content: {
-      abstract: "Plastic pollution caused by single-use polyethylene bags presents a severe environmental challenge, particularly in developing countries where cost constraints limit the adoption of eco-friendly alternatives. This research explores a biodegradable packaging bag derived from agricultural waste — specifically jackfruit string, jackfruit core, and jackfruit seed starch — combined with a coconut shell biochar layer to enhance water resistance and thermal stability. Raw material cost per bag: ≤1 Bangladeshi Taka.",
-      sections: [
-        { heading: "1. Materials Selection", body: "Jackfruit Seed Starch — locally abundant, zero import cost, strong film-forming ability, serves as the primary binding matrix. Jackfruit String & Core Fibers — rich in cellulose, increase tensile strength, reduce brittleness, improve structural integrity. Coconut Shell Biochar — high carbon content, hydrophobic compared to pure starch, provides thermal resistance, applied as a surface layer to reduce water absorption." },
-        { heading: "2. Manufacturing Methodology", body: "Starch Extraction: seeds cleaned, dried, ground; starch extracted via water separation. Fiber Preparation: strings and cores washed, sun-dried, mechanically shredded. Biochar Production: coconut shells carbonized under limited oxygen; resulting biochar finely powdered. Bag Formation: starch gelatinized with heat; fibers mixed in; composite cast into thin sheets; biochar applied as coating; dried and heat-pressed into bag form." },
-        { heading: "3. Cost Analysis", body: "Jackfruit waste (agricultural waste): near zero cost. Seed starch (local processing): very low. Coconut shell biochar (waste shells): very low. Energy & water (local methods): minimal. Estimated total cost per bag: ≤1 BDT — directly addressing the main reason biodegradable bags fail in developing markets." },
-        { heading: "4. Environmental Impact", body: "Fully biodegradable under natural conditions · Utilizes waste materials instead of food crops · Reduces plastic pollution · Biochar contributes to carbon sequestration · Low energy manufacturing potential · Aligns with circular economy principles." },
-        { heading: "5. Target Markets", body: "This system is designed not for luxury markets, but for: street vendors, rural markets, and developing economies. By prioritizing cost, simplicity, and local materials, this project addresses real-world adoption barriers." },
-        { heading: "6. Future Work", body: "Tensile strength testing · Water absorption analysis · Heat resistance evaluation · Biodegradation time studies · Optimization of biochar layer thickness · Collaboration with academic laboratories for advanced characterization." },
-      ]
-    }
-  }
-];
-
-const Modal = ({ paper, onClose }) => {
-  if (!paper) return null;
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" onClick={onClose}>
-      <div className="absolute inset-0 bg-black/85 backdrop-blur-xl" />
-      <div
-        className="relative w-full max-w-3xl max-h-[88vh] bg-[#0a0f1e] rounded-3xl border border-slate-700/60 shadow-2xl flex flex-col overflow-hidden"
-        onClick={e => e.stopPropagation()}
-      >
-        <div className="flex items-center justify-between px-7 py-5 border-b border-slate-800 bg-slate-950/70 shrink-0">
-          <div className="flex items-center gap-3">
-            <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${paper.iconBg}`}>{paper.icon}</div>
-            <div>
-              <p className="text-white font-bold text-sm leading-tight">{paper.title}</p>
-              <p className={`text-xs font-medium ${paper.accent}`}>{paper.subtitle}</p>
-            </div>
-          </div>
-          <button onClick={onClose} className="w-8 h-8 rounded-xl bg-slate-800 hover:bg-red-500/20 hover:text-red-400 flex items-center justify-center transition-all text-slate-400">
-            <X size={15} />
-          </button>
-        </div>
-
-        <div className="flex-1 overflow-y-auto px-7 py-6 space-y-6">
-          <div className="flex items-center gap-3 text-xs text-slate-500 font-mono uppercase tracking-wider border-b border-slate-800/60 pb-4">
-            <span>Author: Nobin Debnath</span>
-            <span>·</span>
-            <span>nobindebnath88888@gmail.com</span>
-          </div>
-          <div>
-            <p className={`text-[10px] font-black uppercase tracking-[0.3em] mb-3 ${paper.accent}`}>Abstract</p>
-            <p className="text-slate-300 text-sm leading-relaxed font-light">{paper.content.abstract}</p>
-          </div>
-          {paper.content.sections.map((s, i) => (
-            <div key={i} className="space-y-2">
-              <h4 className="text-white font-bold text-sm">{s.heading}</h4>
-              <p className="text-slate-400 text-sm leading-relaxed font-light">{s.body}</p>
-            </div>
-          ))}
-          <div className={`pt-4 border-t border-slate-800/60 text-[10px] font-mono uppercase tracking-widest ${paper.accent} opacity-50`}>
-            {paper.detailLine}
-          </div>
-        </div>
-
-        <div className="px-7 py-4 border-t border-slate-800 bg-slate-950/60 shrink-0">
-          <p className="text-center text-[9px] text-slate-600 uppercase tracking-widest font-bold">
-            Full PDF available — contact nobindebnath88888@gmail.com
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default function App() {
+const App = () => {
   const [scrolled, setScrolled] = useState(false);
-  const [activePaper, setActivePaper] = useState(null);
 
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", fn);
-    return () => window.removeEventListener("scroll", fn);
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    document.body.style.overflow = activePaper ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [activePaper]);
+  const researchPapers = [
+    {
+      title: "Smart Digital Railway Station",
+      subtitle: "AI-Based Control & Magnetic Safety",
+      icon: <ShieldCheck className="text-emerald-400" />,
+      tag: "National Prize",
+      description: "A framework integrating AI for overspeed prediction and magnetic repulsion for platform-edge stabilization. Competing against leading scientists nationwide.",
+      details: "Published in National Science Museum Magazine.",
+      color: "border-emerald-500/30",
+      btnColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500 hover:text-slate-950",
+      fileName: "Smart Digital Railway Station with Integrated Magnetic Safety and AI 11.pdf"
+    },
+    {
+      title: "Jackfruit Seed Nutrition",
+      subtitle: "Sustainable Humanitarian Food Source",
+      icon: <Brain className="text-blue-400" />,
+      tag: "Humanitarian",
+      description: "Proposed a model to provide 1,200 kcal/day to 533 million children by utilizing discarded agricultural waste.",
+      details: "Focuses on zero-oil preparation for crisis zones.",
+      color: "border-blue-500/30",
+      btnColor: "bg-blue-500/10 text-blue-400 border-blue-500/20 hover:bg-blue-500 hover:text-slate-950",
+      fileName: "Jackfruit Seed Utilization as a Sustainable Food Source for Malnourished Children and Communities (1).pdf"
+    },
+    {
+      title: "Ultra-Low-Cost Bio-Packaging",
+      subtitle: "Jackfruit Waste & Coconut Biochar",
+      icon: <Leaf className="text-lime-400" />,
+      tag: "Materials Science",
+      description: "Created a biodegradable bag costing ≤ 1 BDT using seed starch and coconut shell biochar for water resistance.",
+      details: "Alternative to single-use plastics in developing regions.",
+      color: "border-lime-500/30",
+      btnColor: "bg-lime-500/10 text-lime-400 border-lime-500/20 hover:bg-lime-500 hover:text-slate-950",
+      fileName: "Development of an Ultra.pdf"
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-[#020617] text-slate-200 font-sans selection:bg-emerald-500/30">
-      <Modal paper={activePaper} onClose={() => setActivePaper(null)} />
-
-      <div className="fixed inset-0 -z-10 overflow-hidden">
+      {/* Dynamic Background */}
+      <div className="fixed inset-0 overflow-hidden -z-10">
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-900/10 blur-[120px]" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-blue-900/10 blur-[120px]" />
       </div>
 
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? "bg-slate-950/80 backdrop-blur-lg border-b border-slate-800" : "bg-transparent"}`}>
+      {/* Navigation */}
+      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-slate-950/80 backdrop-blur-lg border-b border-slate-800' : 'bg-transparent'}`}>
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center font-bold text-slate-950 shadow-[0_0_15px_rgba(16,185,129,0.3)]">N</div>
@@ -177,6 +85,7 @@ export default function App() {
         </div>
       </nav>
 
+      {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-6">
         <div className="max-w-6xl mx-auto grid lg:grid-cols-[1fr_0.8fr] gap-12 items-center">
           <div className="space-y-8">
@@ -187,28 +96,40 @@ export default function App() {
               Invention <br /> as <span className="text-emerald-400">Purpose.</span>
             </h1>
             <p className="text-lg text-slate-400 leading-relaxed max-w-lg font-light">
-              Independent researcher and full-stack developer. Bridging the gap between AI-driven safety infrastructure and sustainable humanitarian engineering.
+              Independent researcher and full-stack developer. Bridging the gap between 
+              AI-driven safety infrastructure and sustainable humanitarian engineering.
             </p>
             <div className="flex flex-wrap gap-4">
               <a href="#research" className="flex items-center gap-2 px-6 py-3 bg-white text-slate-950 rounded-xl font-bold text-sm hover:bg-emerald-400 transition-all">
                 View Publications <ArrowRight size={16} />
               </a>
               <div className="flex items-center gap-4 px-4">
-                <a href="mailto:nobindebnath88888@gmail.com" className="text-slate-500 hover:text-white transition-colors"><Mail size={20} /></a>
-                <a href="#" className="text-slate-500 hover:text-white transition-colors"><Github size={20} /></a>
+                <a href="mailto:nobindebnath88888@gmail.com" className="text-slate-500 hover:text-white transition-colors" title="Email"><Mail size={20} /></a>
+                <a href="#" className="text-slate-500 hover:text-white transition-colors" title="GitHub"><Github size={20} /></a>
               </div>
             </div>
           </div>
+          
           <div className="relative group max-w-sm mx-auto lg:mr-0">
-            <div className="absolute inset-0 bg-emerald-500/15 blur-[80px] rounded-full group-hover:bg-emerald-500/25 transition-all" />
-            <div className="relative aspect-[4/5] bg-slate-900 rounded-[2.5rem] border border-slate-800/50 overflow-hidden shadow-2xl transition-transform duration-500 group-hover:-translate-y-2">
-              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop" alt="Nobin Debnath" className="w-full h-full object-cover opacity-90" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent opacity-40" />
+            <div className="absolute inset-0 bg-emerald-500/15 blur-[80px] rounded-full group-hover:bg-emerald-500/25 transition-all"></div>
+            <div className="relative aspect-[4/5] bg-slate-900 rounded-[2.5rem] border border-slate-800/50 overflow-hidden shadow-2xl transition-transform duration-500 group-hover:translate-y-[-8px]">
+              {/* Profile Image - Using your uploaded photo */}
+              <img 
+                src="https://api.screenshotone.com/take?url=https%3A%2F%2Fstorage.googleapis.com%2Fstatic.artificial.com%2Fartifacts%2Ff9e156d6-0c61-4648-963c-658b4ecf7202%2Fpublic%2Fdata%2Fimages%2Fprofile_correct.jpg&access_key=dummy" 
+                alt="Nobin Debnath" 
+                className="w-full h-full object-cover opacity-95"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop";
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent opacity-40"></div>
             </div>
           </div>
         </div>
       </section>
 
+      {/* Research Grid */}
       <section id="research" className="max-w-6xl mx-auto px-6 py-24">
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <div className="space-y-2">
@@ -221,58 +142,60 @@ export default function App() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
-          {papers.map((paper, idx) => (
-            <div key={idx} className={`flex flex-col p-8 rounded-[2rem] bg-slate-900/30 border ${paper.border} hover:bg-slate-900/60 transition-all duration-300 group backdrop-blur-sm`}>
-              <div className={`w-12 h-12 ${paper.iconBg} rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform`}>
+          {researchPapers.map((paper, idx) => (
+            <div key={idx} className={`flex flex-col p-8 rounded-[2rem] bg-slate-900/30 border ${paper.color} hover:bg-slate-900/60 transition-all group cursor-default backdrop-blur-sm`}>
+              <div className="w-12 h-12 bg-slate-800 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-emerald-500/10 transition-transform">
                 {paper.icon}
               </div>
-              <span className={`inline-block self-start px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-widest mb-4 ${paper.tagColor}`}>
+              <div className="inline-block px-2 py-0.5 rounded bg-slate-800/50 text-[9px] font-bold text-slate-400 mb-4 uppercase tracking-widest">
                 {paper.tag}
-              </span>
-              <h3 className="text-xl font-bold text-white mb-1">{paper.title}</h3>
-              <p className={`text-xs font-semibold mb-4 ${paper.accent}`}>{paper.subtitle}</p>
-              <p className="text-slate-400 text-sm leading-relaxed font-light flex-grow mb-5">{paper.description}</p>
-              <div className="flex flex-wrap gap-1.5 mb-6">
-                {paper.highlights.map((h, i) => (
-                  <span key={i} className="px-2 py-0.5 rounded-md bg-slate-800/60 text-[9px] font-bold text-slate-400 uppercase tracking-wide border border-slate-700/50">{h}</span>
-                ))}
               </div>
-              <div className="space-y-2">
-                <button onClick={() => setActivePaper(paper)} className={`w-full py-2.5 rounded-xl border flex items-center justify-center gap-2 text-xs font-bold transition-all duration-300 ${paper.btn}`}>
-                  <Eye size={13} /> Read Full Paper
+              <h3 className="text-xl font-bold text-white mb-2">{paper.title}</h3>
+              <p className="text-xs text-emerald-400 font-medium mb-4">{paper.subtitle}</p>
+              <p className="text-slate-400 text-sm leading-relaxed mb-6 font-light flex-grow">
+                {paper.description}
+              </p>
+              
+              <div className="space-y-4">
+                <button 
+                  className={`w-full py-3 rounded-xl border flex items-center justify-center gap-2 text-xs font-bold transition-all duration-300 ${paper.btnColor}`}
+                  onClick={() => window.open('#', '_blank')}
+                >
+                  Read Full Paper <FileText size={14} />
                 </button>
-                <button className={`w-full py-2.5 rounded-xl border border-slate-700/50 bg-slate-800/30 flex items-center justify-center gap-2 text-xs font-bold text-slate-400 transition-all duration-300 ${paper.dlBtn}`}>
-                  <Download size={13} /> Download PDF
-                </button>
-              </div>
-              <div className="pt-4 mt-2 border-t border-slate-800/40">
-                <span className={`text-[9px] font-mono uppercase tracking-tighter ${paper.accent} opacity-50`}>{paper.detailLine}</span>
+                <div className="pt-4 border-t border-slate-800/30 flex justify-between items-center">
+                  <span className="text-[10px] text-slate-500 font-mono uppercase tracking-tighter">{paper.details}</span>
+                  <div className="w-8 h-8 rounded-full bg-slate-800/50 flex items-center justify-center group-hover:bg-emerald-400 group-hover:text-slate-950 transition-colors shadow-sm">
+                    <ArrowRight size={14} />
+                  </div>
+                </div>
               </div>
             </div>
           ))}
         </div>
       </section>
 
+      {/* Software Focus */}
       <section id="software" className="relative py-24 bg-slate-900/10 border-y border-slate-900/50">
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-20 items-center">
           <div className="order-2 md:order-1 relative aspect-square group">
-            <div className="absolute inset-0 bg-emerald-500/5 blur-[100px] group-hover:bg-emerald-500/10 transition-all" />
+            <div className="absolute inset-0 bg-emerald-500/5 blur-[100px] group-hover:bg-emerald-500/10 transition-all"></div>
             <div className="relative w-full h-full bg-slate-950 rounded-[3rem] border border-slate-800 flex flex-col p-1 shadow-2xl">
               <div className="flex gap-1.5 p-4 border-b border-slate-900">
-                <div className="w-2.5 h-2.5 rounded-full bg-red-500/30" />
-                <div className="w-2.5 h-2.5 rounded-full bg-amber-500/30" />
-                <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/30" />
+                <div className="w-2.5 h-2.5 rounded-full bg-red-500/30"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-amber-500/30"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/30"></div>
               </div>
-              <div className="flex-1 flex items-center justify-center p-8 overflow-hidden relative">
+              <div className="flex-1 flex items-center justify-center p-8 overflow-hidden">
                 <div className="grid grid-cols-10 grid-rows-8 gap-1 w-full h-full opacity-20 group-hover:opacity-30 transition-opacity">
                   {Array.from({ length: 80 }).map((_, i) => (
-                    <div key={i} className={`border border-slate-800/50 rounded-sm ${(Math.floor(i / 10) + (i % 10)) % 2 === 0 ? "bg-slate-800/20" : "bg-transparent"}`} />
+                    <div key={i} className={`border border-slate-800/50 rounded-sm ${(Math.floor(i/10) + (i%10)) % 2 === 0 ? 'bg-slate-800/20' : 'bg-transparent'}`}></div>
                   ))}
                 </div>
                 <div className="absolute text-center space-y-3 p-6 backdrop-blur-sm bg-slate-950/40 rounded-3xl border border-white/5">
-                  <Code className="mx-auto text-emerald-500 mb-2" size={32} />
-                  <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-emerald-400 font-bold">Multiplayer Engine v1.0</p>
-                  <p className="text-white text-2xl font-bold tracking-tighter">Chaturanga 8x10</p>
+                   <Code className="mx-auto text-emerald-500 mb-2" size={32} />
+                   <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-emerald-400 font-bold">Multiplayer Engine v1.0</p>
+                   <p className="text-white text-2xl font-bold tracking-tighter">Chaturanga 8x10</p>
                 </div>
               </div>
             </div>
@@ -280,7 +203,9 @@ export default function App() {
           <div className="order-1 md:order-2 space-y-8">
             <h2 className="text-[10px] font-black text-blue-400 uppercase tracking-[0.4em]">Analytical Platform</h2>
             <h3 className="text-5xl font-bold text-white tracking-tight leading-tight">Work as <span className="italic font-serif text-slate-500">Play.</span></h3>
-            <p className="text-slate-400 text-lg leading-relaxed font-light">Applying the rigor of research to the fluidity of software. My current flagship project is a real-time multiplayer engine designed to sharpen analytical skills through strategic gaming.</p>
+            <p className="text-slate-400 text-lg leading-relaxed font-light">
+              Applying the rigor of research to the fluidity of software. My current flagship project is a real-time multiplayer engine designed to sharpen analytical skills through strategic gaming.
+            </p>
             <div className="space-y-6">
               {[
                 { label: "Real-time Sync", detail: "Firebase-backed multi-node state synchronization." },
@@ -302,21 +227,29 @@ export default function App() {
         </div>
       </section>
 
+      {/* Identity & Philosophy */}
       <section id="story" className="max-w-4xl mx-auto px-6 py-32 text-center">
         <div className="space-y-16">
           <div className="inline-block p-4 rounded-3xl bg-slate-900 border border-slate-800 shadow-xl">
-            <Brain className="text-emerald-500" size={32} />
+             <Brain className="text-emerald-500" size={32} />
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tighter italic">"The Self-Built Classroom"</h2>
           <div className="space-y-8 text-slate-400 text-lg leading-relaxed max-w-2xl mx-auto text-justify">
-            <p className="font-light">I grew up in an education system where success was measured by memorization. Curiosity was not rewarded; deviation was discouraged. For a long time, I felt like my real abilities existed outside the classroom.</p>
-            <div className="py-8 px-10 bg-slate-900/50 rounded-[2.5rem] border border-emerald-500/20 shadow-inner relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500" />
-              <p className="font-medium text-white text-left italic text-xl leading-relaxed relative z-10">"So I built my own classroom. Failures taught me to isolate variables, document results, and repeat."</p>
-              <div className="absolute right-[-20px] bottom-[-20px] text-emerald-500/5 rotate-[-15deg] font-serif text-8xl font-black">PLAY</div>
+            <p className="font-light">
+              I grew up in an education system where success was measured by memorization. Curiosity was not rewarded; deviation was discouraged. For a long time, I felt like my real abilities existed outside the classroom.
+            </p>
+            <div className="py-8 px-10 bg-slate-900/50 rounded-[2.5rem] border border-emerald-500/20 shadow-inner relative overflow-hidden group">
+               <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
+               <p className="font-medium text-white text-left italic text-xl leading-relaxed relative z-10">
+                 "So I built my own classroom. Failures taught me to isolate variables, document results, and repeat."
+               </p>
+               <div className="absolute right-[-20px] bottom-[-20px] text-emerald-500/5 rotate-[-15deg] font-serif text-8xl font-black">PLAY</div>
             </div>
-            <p className="font-light">Whether it was experimenting with jackfruit seeds at home or designing magnetic safety systems for railway platforms, my journey has been defined by the resolve to follow purpose with courage, even without certainty or applause.</p>
+            <p className="font-light">
+              Whether it was experimenting with jackfruit seeds at home or designing magnetic safety systems for railway platforms, my journey has been defined by the resolve to follow purpose with courage, even without certainty or applause.
+            </p>
           </div>
+          
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-12">
             {[
               { val: "1st", label: "Digital Innovation Fair" },
@@ -324,7 +257,7 @@ export default function App() {
               { val: "Nat'l", label: "Programming Olympiad" },
               { val: "Final", label: "Physics Olympiad" }
             ].map((stat, i) => (
-              <div key={i} className="p-6 rounded-3xl bg-slate-900/40 border border-slate-800/50 group hover:border-emerald-500/30 transition-all">
+              <div key={i} className="p-6 rounded-3xl bg-slate-900/40 border border-slate-800/50 backdrop-blur-sm group hover:border-emerald-500/30 transition-all">
                 <div className="text-2xl font-black text-white group-hover:text-emerald-400 transition-colors">{stat.val}</div>
                 <div className="text-[9px] uppercase tracking-widest text-slate-500 font-bold mt-2">{stat.label}</div>
               </div>
@@ -333,6 +266,7 @@ export default function App() {
         </div>
       </section>
 
+      {/* Final CTA */}
       <section id="contact" className="max-w-6xl mx-auto px-6 pb-32">
         <div className="p-12 md:p-20 rounded-[3.5rem] bg-gradient-to-br from-emerald-500/90 to-blue-600/90 flex flex-col items-center text-center shadow-[0_0_50px_rgba(16,185,129,0.2)]">
           <h2 className="text-4xl md:text-6xl font-black text-[#020617] tracking-tighter mb-10 leading-tight">Let's collaborate on <br /> the next breakthrough.</h2>
@@ -355,4 +289,6 @@ export default function App() {
       </footer>
     </div>
   );
-}
+};
+
+export default App;
